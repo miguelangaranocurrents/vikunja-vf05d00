@@ -152,7 +152,7 @@
 					{{ $t('misc.save') }}
 				</BaseButton>
 			</li>
-			<li v-if="!isEditing">
+			<li v-if="!isEditing && isEditEnabled">
 				<BaseButton
 					class="done-edit"
 					@click="() => setEdit()"
@@ -189,6 +189,7 @@ import {useI18n} from 'vue-i18n'
 import {eventToShortcutString} from '@/helpers/shortcut'
 
 import EditorToolbar from './EditorToolbar.vue'
+import {serializeClipboardText} from './clipboardText'
 
 import {Extension, isTextSelection, mergeAttributes, type SetContentOptions} from '@tiptap/core'
 import {EditorContent, type Extensions, useEditor, VueNodeViewRenderer} from '@tiptap/vue-3'
@@ -350,6 +351,7 @@ const editor = useEditor({
 	extensions: extensions,
 	onUpdate: bubbleNow,
 	editorProps: {
+		clipboardTextSerializer: slice => serializeClipboardText(slice.content),
 		attributes: {
 			'aria-label': props.placeholder || t('input.editor.label'),
 		},
